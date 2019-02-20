@@ -634,6 +634,24 @@ class Versioned extends DataExtension implements TemplateGlobalProvider, Resetta
             $stageCondition = '';
         }
 
+        $joinParams = [$date];
+        $joinConditions = [];
+        foreach ($query->getWhere() as $clauseSpec) {
+            $clause = key($clauseSpec);
+            if (strpos($clause, 'WasDeleted') === false && strpos('"' . $clause . '"', $baseTable) !== false) {
+                $joinConditions[] = $clauseSpec;
+            }
+        }
+
+        if (count($joinConditions)) {
+            $predicates = [];
+            $params = [];
+            $query->splitQueryParameters($joinConditions, $predicates, $params);
+            $joinParams = array_merge($joinParams, $params);
+
+            $stageCondition .= ' AND ' . implode(' AND ', $predicates);
+        }
+
         // Join on latest version filtered by date
         $query->addInnerJoin(
             <<<SQL
@@ -654,7 +672,7 @@ SQL
             ,
             "{$baseTable}_Versions_Latest",
             20,
-            [$date]
+            $joinParams
         );
     }
 
