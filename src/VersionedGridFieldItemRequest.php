@@ -113,10 +113,6 @@ class VersionedGridFieldItemRequest extends GridFieldDetailForm_ItemRequest
 
     /**
      * Archive this versioned record
-     *
-     * @param array $data
-     * @param Form $form
-     * @return HTTPResponse
      */
     public function doArchive($data, $form)
     {
@@ -149,10 +145,6 @@ class VersionedGridFieldItemRequest extends GridFieldDetailForm_ItemRequest
 
     /**
      * Publish this versioned record
-     *
-     * @param array $data
-     * @param Form $form
-     * @return HTTPResponse
      */
     public function doPublish($data, $form)
     {
@@ -187,10 +179,6 @@ class VersionedGridFieldItemRequest extends GridFieldDetailForm_ItemRequest
 
     /**
      * Delete this record from the live site
-     *
-     * @param array $data
-     * @param Form $form
-     * @return HTTPResponse
      */
     public function doUnpublish($data, $form)
     {
