@@ -298,11 +298,6 @@ class ChangeSet extends DataObject
      */
     public function sync()
     {
-        // Only sync open changesets
-        if ($this->State !== static::STATE_OPEN) {
-            return;
-        }
-
         // Start a transaction (if we can)
         DB::get_conn()->withTransaction(function () {
 

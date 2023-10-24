@@ -732,4 +732,32 @@ class ChangeSetTest extends SapphireTest
 
         $this->assertFalse($changeset->isSyncCalled, 'isSynced is skipped when providing truthy argument to publish');
     }
+
+    public function testRemoveObject()
+    {
+        $this->publishAllFixtures();
+
+        $mid1 = $this->objFromFixture(ChangeSetTest\MidObject::class, 'mid1');
+        $mid2 = $this->objFromFixture(ChangeSetTest\MidObject::class, 'mid2');
+
+        $changeset = new ChangeSet();
+        $changeset->write();
+        $changeset->addObject($mid1);
+        $changeset->addObject($mid2);
+        $changeset->publish();
+
+        $changeset->removeObject($mid1);
+
+        $this->assertChangeSetLooksLike(
+            $changeset,
+            [
+                ChangeSetTest\MidObject::class . '.mid2' => ChangeSetItem::EXPLICITLY,
+                ChangeSetTest\EndObject::class . '.end2' => ChangeSetItem::IMPLICITLY,
+            ]
+        );
+
+        $changeset->removeObject($mid2);
+
+        $this->assertChangeSetLooksLike($changeset, []);
+    }
 }
